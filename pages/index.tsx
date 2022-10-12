@@ -1,10 +1,13 @@
-import Head from 'next/head'
-import clientPromise from '../lib/mongodb'
-import { InferGetServerSidePropsType } from 'next'
+import Head from 'next/head';
+import clientPromise from '../lib/mongodb';
+import { InferGetServerSidePropsType } from 'next';
+import Link from 'next/link';
+import TitleBar from '../components/TitleBar';
+import styles from './Home.module.css';
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: any) {
   try {
-    await clientPromise
+    await clientPromise;
     // `await clientPromise` will use the default database passed in the MONGODB_URI
     // However you can use another database (e.g. myDatabase) by replacing the `await clientPromise` with the following code:
     //
@@ -16,57 +19,69 @@ export async function getServerSideProps(context) {
 
     return {
       props: { isConnected: true },
-    }
+    };
   } catch (e) {
     console.error(e)
     return {
       props: { isConnected: false },
-    }
+    };
   }
 }
 
 export default function Home({
   isConnected,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+
+  if (!isConnected)
+  {
+    console.log('Unable to connect to the database at this time. please check again later.');
+  }
+
   return (
-    <div className="container">
+    <div className={styles.container}>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js with MongoDB!</a>
-        </h1>
+        <TitleBar links={[{href: '/Blogs', disp: 'Blogs'}, {href: '/Projects', disp: 'Projects'}, {href: '/GithubProjects', disp: 'Repos'}]}/>
 
         {isConnected ? (
-          <h2 className="subtitle">You are connected to MongoDB</h2>
+          <div>
+            <h2 className={styles.subtitle}>You are connected to MongoDB</h2>
+            <Link href="/Blogs">
+              <a>Blogs</a>
+            </Link>
+          </div>
         ) : (
-          <h2 className="subtitle">
-            You are NOT connected to MongoDB. Check the <code>README.md</code>{' '}
-            for instructions.
+          <h2 className={styles.subtitle}>
+            You are NOT connected to the database...
           </h2>
         )}
 
-        <p className="description">
+        <Link href='/GithubProjects'>
+          <a>Github Projects</a>
+        </Link>
+
+        <p className={styles.description}>
           Get started by editing <code>pages/index.js</code>
         </p>
 
-        <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
+        <div className={styles.grid}>
+          <a href="https://nextjs.org/docs" className={styles.card}>
             <h3>Documentation &rarr;</h3>
             <p>Find in-depth information about Next.js features and API.</p>
           </a>
 
-          <a href="https://nextjs.org/learn" className="card">
+          <a href="https://nextjs.org/learn" className={styles.card}>
             <h3>Learn &rarr;</h3>
             <p>Learn about Next.js in an interactive course with quizzes!</p>
           </a>
 
           <a
             href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="card"
+            className={styles.card}
           >
             <h3>Examples &rarr;</h3>
             <p>Discover and deploy boilerplate example Next.js projects.</p>
@@ -76,7 +91,7 @@ export default function Home({
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             target="_blank"
             rel="noopener noreferrer"
-            className="card"
+            className={styles.card}
           >
             <h3>Deploy &rarr;</h3>
             <p>
@@ -93,146 +108,73 @@ export default function Home({
           rel="noopener noreferrer"
         >
           Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
+          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
         </a>
       </footer>
 
       <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
+      main {
+        padding: 1rem 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: whitesmoke;
+      }
 
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
+      footer {
+        width: 100%;
+        height: 100px;
+        border-top: 1px solid #eaeaea;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: whitesmoke;
+      }
+      
+      footer img {
+        margin-left: 0.5rem;
+      }
+      
+      footer a {
+        display: flex;
+        color: gray;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      a {
+        color: gray;
+        text-decoration: none;
+      }
 
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
+      code {
+        background: #164654;
+        border-radius: 5px;
+        color: whitesmoke;
+        padding: 0.75rem;
+        font-size: 1.1rem;
+        font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
+          DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+      }
 
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .subtitle {
-          font-size: 2rem;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
+      button {
+        background-color: #153059;
+        color: whitesmoke;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 0.5rem;
+        transition: background-color 150ms ease-out;
+      }
+      
+      button:hover {
+        background-color: #1d4279;
+      }
       `}</style>
 
       <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Silkscreen&display=swap');
         html,
         body {
           padding: 0;
@@ -240,6 +182,8 @@ export default function Home({
           font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
             Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
             sans-serif;
+          
+          background-color: #0b2736;
         }
 
         * {
@@ -247,5 +191,5 @@ export default function Home({
         }
       `}</style>
     </div>
-  )
+  );
 }

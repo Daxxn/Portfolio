@@ -1,0 +1,11 @@
+.repoBase {
+  background-color: rgb(42, 64, 97);
+  color: white;
+  border-radius: 0.5rem;
+}
+
+.readmeBase {
+  background-color: whitesmoke;
+  color: black;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

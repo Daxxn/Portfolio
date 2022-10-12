@@ -1,0 +1,40 @@
+.titlebarBase
+{
+  display: flex;
+  flex-flow: nowrap column;
+  background-color: #1c465d;
+  padding: 2rem 0rem 0rem 0rem;
+  border-radius: 0.25rem;
+  color: white;
+  width: 100%;
+}
+
+.titleText
+{
+  font-family: 'Silkscreen';
+  font-size: 3rem;
+  padding: 0;
+  margin: 0.5rem;
+  color: whitesmoke;
+  align-self: center;
+}
+
+.linkList
+{
+  display: flex;
+  flex-flow: nowrap row;
+  justify-content: space-between;
+}
+
+.btn {
+  background-color: #153059;
+  color: whitesmoke;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  transition: background-color 150ms ease-out;
+}
+
+.btn:hover {
+  background-color: #1d4279;
+}
